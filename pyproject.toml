@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pbl4-ORC"
+version = "0.1.0"
+description = ""
+authors = ["vohoanglong01072001 <mamlong34@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
