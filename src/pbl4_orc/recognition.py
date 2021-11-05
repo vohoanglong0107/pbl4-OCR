@@ -8,6 +8,8 @@ import torch.utils.data
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 import numpy as np
+
+from .config import MODULE_PATH
 from .utils import CTCLabelConverter
 
 
@@ -188,7 +190,7 @@ def get_recognizer(
     converter = CTCLabelConverter(character, separator_list, dict_list)
     num_class = len(converter.character)
 
-    model_pkg = importlib.import_module(os.path.join("models", recog_network))
+    model_pkg = importlib.import_module(recog_network)
     model = model_pkg.Model(num_class=num_class, **network_params)
 
     if device == "cpu":

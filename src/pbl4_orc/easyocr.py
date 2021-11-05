@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
+from logging import getLogger
+import os
+from pathlib import Path
+import sys
 
+import torch
+import yaml
+
+from .config import MODULE_PATH, BASE_PATH, detection_models, imgH
 from .detection import get_detector, get_textbox
 from .recognition import get_recognizer, get_text
 from .utils import (
@@ -12,12 +20,6 @@ from .utils import (
     set_result_with_confidence,
     reformat_input_batched,
 )
-from .config import MODULE_PATH, BASE_PATH, detection_models
-import torch
-import os
-from logging import getLogger
-import yaml
-from pathlib import Path
 
 LOGGER = getLogger(__name__)
 
@@ -48,7 +50,7 @@ class Reader(object):
 
         """
 
-        self.model_storage_directory = MODULE_PATH + "/model"
+        self.model_storage_directory = MODULE_PATH + "model"
         if model_storage_directory:
             self.model_storage_directory = model_storage_directory
         Path(self.model_storage_directory).mkdir(parents=True, exist_ok=True)
@@ -85,18 +87,17 @@ class Reader(object):
             encoding="utf8",
         ) as file:
             recog_config = yaml.load(file, Loader=yaml.FullLoader)
-        imgH = recog_config['imgH']
+        imgH = recog_config["imgH"]
         self.character = recog_config["character_list"]
         model_file = recog_network + ".pth"
         model_path = os.path.join(self.model_storage_directory, model_file)
+        sys.path.append(self.model_storage_directory)
 
         self.setLanguageList(lang_list, None)
         self.setDictList(lang_list)
 
         if detector:
-            self.detector = get_detector(
-                detector_path, self.device
-            )
+            self.detector = get_detector(detector_path, self.device)
         if recognizer:
             network_params = recog_config["network_params"]
             self.recognizer, self.converter = get_recognizer(
@@ -112,16 +113,16 @@ class Reader(object):
     def setLanguageList(self, lang_list, model):
         self.lang_char = []
         for lang in lang_list:
-            char_file = os.path.join(BASE_PATH, 'character', lang + "_char.txt")
+            char_file = os.path.join(BASE_PATH, "character", lang + "_char.txt")
             with open(char_file, "r", encoding="utf-8-sig") as input_file:
                 char_list = input_file.read().splitlines()
             self.lang_char += char_list
         if model:
-            symbol = model['symbols']
+            symbol = model["symbols"]
         else:
-            symbol = '0123456789!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ '
+            symbol = "0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ "
         self.lang_char = set(self.lang_char).union(set(symbol))
-        self.lang_char = ''.join(self.lang_char)
+        self.lang_char = "".join(self.lang_char)
 
     def setDictList(self, lang_list):
         dict_list = {}
@@ -312,7 +313,7 @@ class Reader(object):
                 # one of the rotations (first row being no rotation)
                 result = set_result_with_confidence(
                     [
-                        result[image_len * i: image_len * (i + 1)]
+                        result[image_len * i : image_len * (i + 1)]
                         for i in range(len(rotation_info) + 1)
                     ]
                 )

@@ -368,7 +368,7 @@ class CTCLabelConverter(object):
         texts = []
         index = 0
         for i in length:
-            t = text_index[index: index + i]
+            t = text_index[index : index + i]
             # Returns a boolean array where true is when the value is not repeated
             a = np.insert(~((t[1:] == t[:-1])), 0, True)
             # Returns a boolean array
@@ -425,7 +425,7 @@ class CTCLabelConverter(object):
                 words = word_segmentation(argmax[i])
 
                 for word in words:
-                    matrix = mat[i, word[1][0]: word[1][1] + 1, :]
+                    matrix = mat[i, word[1][0] : word[1][1] + 1, :]
                     if word[0] == "":
                         dict_list = []
                     else:
@@ -698,27 +698,6 @@ def get_image_list(horizontal_list, free_list, img, model_height=64, sort_output
             image_list, key=lambda item: item[0][0][1]
         )  # sort by vertical position
     return image_list, max_width
-
-
-def download_and_unzip(url, filename, model_storage_directory, verbose=True):
-    zip_path = os.path.join(model_storage_directory, "temp.zip")
-    reporthook = (
-        printProgressBar(prefix="Progress:", suffix="Complete", length=50)
-        if verbose
-        else None
-    )
-    urlretrieve(url, zip_path, reporthook=reporthook)
-    with ZipFile(zip_path, "r") as zipObj:
-        zipObj.extract(filename, model_storage_directory)
-    os.remove(zip_path)
-
-
-def calculate_md5(fname):
-    hash_md5 = hashlib.md5()
-    with open(fname, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
 
 
 def diff(input_list):
