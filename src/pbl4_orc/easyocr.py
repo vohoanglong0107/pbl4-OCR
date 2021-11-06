@@ -9,7 +9,7 @@ import yaml
 
 from .config import MODULE_PATH, BASE_PATH, detection_models, imgH
 from .detector import get_detector, get_textbox
-from .recognitor import get_recognizer, get_text
+from .recognizer import get_recognizer, get_text
 from .utils import (
     group_text_box,
     get_image_list,

@@ -1,5 +1,6 @@
 import argparse
 import os
+from typing import Optional
 
 import pandas as pd
 import yaml
@@ -39,10 +40,10 @@ def get_config(file_path):
     return opt
 
 
-def main():
+def main(sys_args: Optional[list[str]] = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="./configs/en_config.yaml")
-    args = parser.parse_args()
+    args = parser.parse_args(sys_args)
     opt = get_config(args.config)
     train(opt)
 

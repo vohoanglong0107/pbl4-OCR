@@ -4,7 +4,7 @@
 __pycache__
 src/pbl4_orc/__pycache__/
 src/pbl4_orc/detector/__pycache__/
-src/pbl4_orc/recognitor/__pycache__/
+src/pbl4_orc/recognizer/__pycache__/
 tests/__pycache__/
 # data
 data/

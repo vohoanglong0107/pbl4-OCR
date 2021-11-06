@@ -2,6 +2,8 @@ import os
 import sys
 import time
 import random
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.init as init
@@ -159,13 +161,21 @@ def train(opt, show_number=2):
     except Exception:
         pass
 
+    # filter that only require gradient decent
+    filtered_parameters = []
+    params_num = []
+    for p in filter(lambda p: p.requires_grad, model.parameters()):
+        filtered_parameters.append(p)
+        params_num.append(np.prod(p.size()))
+    print('Trainable params num : ', sum(params_num))
+
     # setup optimizer
     if opt.optim == "adam":
         # optimizer = optim.Adam(filtered_parameters, lr=opt.lr, betas=(opt.beta1, 0.999)) # noqa: E501
-        optimizer = optim.Adam(model.parameters())
+        optimizer = optim.Adam(filtered_parameters)
     else:
         optimizer = optim.Adadelta(
-            model.parameters(), lr=opt.lr, rho=opt.rho, eps=opt.eps
+            filtered_parameters, lr=opt.lr, rho=opt.rho, eps=opt.eps
         )
     print("Optimizer:")
     print(optimizer)
@@ -197,7 +207,9 @@ def train(opt, show_number=2):
 
     t1 = time.time()
 
-    for _ in tqdm(range(start_iter, opt.num_iter)):
+    pbar = tqdm(range(start_iter, opt.num_iter))
+
+    for _ in pbar:
         # train part
         optimizer.zero_grad(set_to_none=True)
 
@@ -216,7 +228,7 @@ def train(opt, show_number=2):
             torch.backends.cudnn.enabled = True
         else:
             preds = model(image, text[:, :-1])  # align with Attention.forward
-            target = text[:, 1:]  # without [GO] Symbol
+            target = text[:, 1:].to(device)  # without [GO] Symbol
             cost = criterion(
                 preds.view(-1, preds.shape[-1]), target.contiguous().view(-1)
             )
@@ -224,6 +236,7 @@ def train(opt, show_number=2):
         torch.nn.utils.clip_grad_norm_(model.parameters(), opt.grad_clip)
         optimizer.step()
         loss_avg.add(cost)
+        pbar.set_postfix({'loss': loss_avg.val().item()})
 
         # validation part
         if (i % opt.valInterval == 0) and (i != 0):

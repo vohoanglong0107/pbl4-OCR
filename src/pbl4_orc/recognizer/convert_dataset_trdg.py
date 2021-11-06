@@ -1,5 +1,6 @@
 import argparse
 import os
+from typing import Optional
 import pandas as pd
 
 
@@ -21,8 +22,12 @@ def rename_file_dataset(data_dir):
     data.to_csv(os.path.join(data_dir, "labels.csv"), index=False)
 
 
-if __name__ == "__main__":
+def main(sys_args: Optional[list[str]] = None) -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_dir", type=str, default="data/en/train/")
-    args = parser.parse_args()
+    parser.add_argument("--data-dir", type=str, default="data/train/")
+    args = parser.parse_args(sys_args)
     rename_file_dataset(args.data_dir)
+
+
+if __name__ == "__main__":
+    main()
