@@ -8,8 +8,8 @@ import torch
 import yaml
 
 from .config import MODULE_PATH, BASE_PATH, detection_models, imgH
-from .detection import get_detector, get_textbox
-from .recognition import get_recognizer, get_text
+from .detector import get_detector, get_textbox
+from .recognitor import get_recognizer, get_text
 from .utils import (
     group_text_box,
     get_image_list,
@@ -87,6 +87,7 @@ class Reader(object):
             encoding="utf8",
         ) as file:
             recog_config = yaml.load(file, Loader=yaml.FullLoader)
+        global imgH
         imgH = recog_config["imgH"]
         self.character = recog_config["character_list"]
         model_file = recog_network + ".pth"

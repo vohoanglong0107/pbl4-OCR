@@ -9,8 +9,7 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 import numpy as np
 
-from .config import MODULE_PATH
-from .utils import CTCLabelConverter
+from .labelconverter import CTCLabelConverter
 
 
 def custom_mean(x):
@@ -70,6 +69,7 @@ class ListDataset(torch.utils.data.Dataset):
 
 
 class AlignCollate(object):
+    # for inference only
     def __init__(
         self, imgH=32, imgW=100, keep_ratio_with_pad=False, adjust_contrast=0.0
     ):
@@ -138,26 +138,17 @@ def recognizer_predict(
 
             # filter ignore_char, rebalance
             preds_prob = F.softmax(preds, dim=2)
-            preds_prob = preds_prob.cpu().detach().numpy()
             preds_prob[:, :, ignore_idx] = 0.0
             pred_norm = preds_prob.sum(axis=2)
-            preds_prob = preds_prob / np.expand_dims(pred_norm, axis=-1)
-            preds_prob = torch.from_numpy(preds_prob).float().to(device)
+            preds_prob = preds_prob / pred_norm.unsqueeze(-1)
 
-            if decoder == "greedy":
-                # Select max probability (greedy decoding)
-                # then decode index to character
-                _, preds_index = preds_prob.max(2)
-                preds_index = preds_index.view(-1)
-                preds_str = converter.decode_greedy(
-                    preds_index.data.cpu().detach().numpy(), preds_size.data
-                )
-            elif decoder == "beamsearch":
-                k = preds_prob.cpu().detach().numpy()
-                preds_str = converter.decode_beamsearch(k, beamWidth=beamWidth)
-            elif decoder == "wordbeamsearch":
-                k = preds_prob.cpu().detach().numpy()
-                preds_str = converter.decode_wordbeamsearch(k, beamWidth=beamWidth)
+            # Select max probability (greedy decoding)
+            # then decode index to character
+            _, preds_index = preds_prob.max(2)
+            preds_index = preds_index.view(-1)
+            preds_str = converter.decode_greedy(
+                preds_index.data.cpu().detach().numpy(), preds_size.data
+            )
 
             preds_prob = preds_prob.cpu().detach().numpy()
             values = preds_prob.max(axis=2)

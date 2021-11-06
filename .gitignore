@@ -1,3 +1,16 @@
-# pycache
+# cache
+.mypy_cache
+.pytest_cache
+__pycache__
 src/pbl4_orc/__pycache__/
+src/pbl4_orc/detector/__pycache__/
+src/pbl4_orc/recognitor/__pycache__/
 tests/__pycache__/
+# data
+data/
+
+# saved models
+saved_models
+
+#vscode
+.vscode

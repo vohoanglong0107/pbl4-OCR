@@ -15,7 +15,14 @@ def test_load_custom_example():
 
 
 @pytest.mark.parametrize(
-    "image", ["102022304261145309001.jpg", "Screenshot 2021-11-04 153513.png", "Screenshot 2021-11-04 154451.png"]
+    "image",
+    [
+        "102022304261145309001.jpg",
+        "Screenshot 2021-11-04 153513.png",
+        "Screenshot 2021-11-04 154451.png",
+        "Screenshot 2021-11-05 205551.png",
+        "Screenshot 2021-11-05 213832.png",
+    ],
 )
 def test_predict_custom_example(image):
     reader = Reader(["en"], recog_network="custom_example")
