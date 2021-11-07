@@ -1,15 +1,15 @@
 number: '0123456789'
 symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ €"
 lang_char: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-experiment_name: 'test_wrong_param'
-train_data: 'data/test_dataset/train'
-valid_data: 'data/test_dataset/valid'
+experiment_name: 'attn_synthetic'
+train_data: '../data/trdg_synthetic/train'
+valid_data: '../data/trdg_synthetic/valid'
 manualSeed: 1111
-workers: 1
-batch_size: 64 #32
-num_iter: 20002
-valInterval: 1
-saved_model: 'saved_models/test_attn/iter_20000.pth'
+workers: 2
+batch_size: 256 #32
+num_iter: 20000
+valInterval: 4000
+saved_model: '' # 'saved_models/test_attn/iter_20000.pth'
 FT: False
 optim: False # default is Adadelta
 lr: 1
@@ -21,7 +21,7 @@ grad_clip: 5
 select_data: 'train' # this is dataset folder in train_data
 batch_ratio: '1' 
 total_data_usage_ratio: 1.0
-batch_max_length: 34 
+batch_max_length: 100 
 imgH: 64
 imgW: 600
 rgb: False

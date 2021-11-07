@@ -1,6 +1,6 @@
 import argparse
 import os
-from typing import Optional
+from typing import List, Optional
 import pandas as pd
 
 
@@ -22,7 +22,7 @@ def rename_file_dataset(data_dir):
     data.to_csv(os.path.join(data_dir, "labels.csv"), index=False)
 
 
-def main(sys_args: Optional[list[str]] = None) -> None:
+def main(sys_args: Optional[List[str]] = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=str, default="data/train/")
     args = parser.parse_args(sys_args)

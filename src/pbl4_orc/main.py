@@ -1,10 +1,10 @@
 import argparse
 import sys
-from typing import Optional
+from typing import Optional, List
 from . import recognizer
 
 
-def main(sys_args: Optional[list[str]] = None) -> None:
+def main(sys_args: Optional[List[str]] = None) -> None:
     if sys_args is None:
         sys_args = sys.argv[1:]
     parser = argparse.ArgumentParser(description='PBL4 ORC')
