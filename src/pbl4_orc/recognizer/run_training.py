@@ -6,12 +6,7 @@ import pandas as pd
 import yaml
 
 from .train import train
-
-
-class AttrDict(dict):
-    def __init__(self, *args, **kwargs):
-        super(AttrDict, self).__init__(*args, **kwargs)
-        self.__dict__ = self
+from ..utils import AttrDict
 
 
 def get_config(file_path):

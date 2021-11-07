@@ -9,7 +9,8 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 import numpy as np
 
-from .labelconverter import CTCLabelConverter
+from .labelconverter import CTCLabelConverter, AttnLabelConverter
+from .model import Model
 
 
 def custom_mean(x):
@@ -131,7 +132,7 @@ def recognizer_predict(
                 torch.LongTensor(batch_size, batch_max_length + 1).fill_(0).to(device)
             )
 
-            preds = model(image, text_for_pred)
+            preds = model(image, text_for_pred, is_train=False)
 
             # Select max probability (greedy decoding) then decode index to character
             preds_size = torch.IntTensor([preds.size(1)] * batch_size)
@@ -146,7 +147,7 @@ def recognizer_predict(
             # then decode index to character
             _, preds_index = preds_prob.max(2)
             preds_index = preds_index.view(-1)
-            preds_str = converter.decode_greedy(
+            preds_str = converter.decode(
                 preds_index.data.cpu().detach().numpy(), preds_size.data
             )
 
@@ -178,11 +179,16 @@ def get_recognizer(
     device="cpu",
 ):
 
-    converter = CTCLabelConverter(character, separator_list, dict_list)
+    if "CTC" in network_params.Prediction:
+        converter = CTCLabelConverter(
+            character, separator_list, dict_list
+        )
+    else:
+        converter = AttnLabelConverter(character)
     num_class = len(converter.character)
 
-    model_pkg = importlib.import_module(recog_network)
-    model = model_pkg.Model(num_class=num_class, **network_params)
+    network_params.num_class = num_class
+    model = Model(network_params)
 
     if device == "cpu":
         state_dict = torch.load(model_path, map_location=device)
