@@ -56,7 +56,7 @@ def train(opt, show_number=2):
     )
     valid_loader = torch.utils.data.DataLoader(
         valid_dataset,
-        batch_size=min(32, opt.batch_size),
+        batch_size=opt.batch_size,
         shuffle=True,  # 'True' to check training progress with validation function.
         num_workers=int(opt.workers),
         prefetch_factor=512,

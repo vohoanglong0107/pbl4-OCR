@@ -5,20 +5,20 @@ import pandas as pd
 
 
 def rename_file_dataset(data_dir):
+    dirs = os.listdir(data_dir)
     data = pd.DataFrame(
-        columns=["filename", "words"], index=pd.RangeIndex(start=0, stop=1000, step=1)
+        columns=["filename", "words"], index=pd.RangeIndex(start=0, stop=len(dirs), step=1)
     )
-    for dirpath, dirnames, filenames in os.walk(data_dir):
-        for filename in filenames:
-            if filename.endswith(".jpg"):
-                row = filename.split("_")
-                assert len(row) == 2
-                words = row[0]
-                fileindex = row[1]
-                data.loc[int(fileindex[:-4])] = [fileindex, words]
-                os.rename(
-                    os.path.join(dirpath, filename), os.path.join(dirpath, fileindex)
-                )
+    for i, filename in enumerate(dirs):
+        if filename.endswith(".jpg"):
+            row = filename.split("_")
+            assert len(row) == 2
+            words = row[0]
+            fileindex = str(i) + ".jpg"
+            os.rename(
+                os.path.join(data_dir, filename), os.path.join(data_dir, fileindex)
+            )
+            data.loc[int(fileindex[:-4])] = [fileindex, words]
     data.to_csv(os.path.join(data_dir, "labels.csv"), index=False)
 
 
