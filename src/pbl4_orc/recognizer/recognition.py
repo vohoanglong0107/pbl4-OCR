@@ -180,9 +180,7 @@ def get_recognizer(
 ):
 
     if "CTC" in network_params.Prediction:
-        converter = CTCLabelConverter(
-            character, separator_list, dict_list
-        )
+        converter = CTCLabelConverter(character, separator_list, dict_list)
     else:
         converter = AttnLabelConverter(character)
     num_class = len(converter.character)

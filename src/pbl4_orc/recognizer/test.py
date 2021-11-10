@@ -51,9 +51,7 @@ def validation(model, criterion, evaluation_loader, converter, opt, device):
             # Select max probabilty (greedy decoding) then decode index to character
             _, preds_index = preds.max(2)
             preds_index = preds_index.view(-1).cpu()
-            preds_str = converter.decode(
-                preds_index.numpy(), preds_size.numpy()
-            )
+            preds_str = converter.decode(preds_index.numpy(), preds_size.numpy())
 
         else:
             preds = model(image, text_for_pred, is_train=False)

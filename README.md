@@ -1,1 +1,0 @@
-Minimal fork of EasyOCR

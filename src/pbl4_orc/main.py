@@ -7,7 +7,7 @@ from . import recognizer
 def main(sys_args: Optional[List[str]] = None) -> None:
     if sys_args is None:
         sys_args = sys.argv[1:]
-    parser = argparse.ArgumentParser(description='PBL4 ORC')
+    parser = argparse.ArgumentParser(description="PBL4 ORC")
     parser.add_argument(
         "command",
         type=str,

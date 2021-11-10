@@ -1,15 +1,15 @@
 number: '0123456789'
 symbol: "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ €"
 lang_char: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-experiment_name: 'TRBA'
-train_data: '../data/trdg/train'
-valid_data: '../data/trdg/valid'
+experiment_name: 'VBC-2-1'
+train_data: '~/.EasyOCR/data/trdg-2/train'
+valid_data: '~/.EasyOCR/data/trdg-2/valid'
 manualSeed: 1111
 workers: 2
-batch_size: 64 #32
-num_iter: 10000
-valInterval: 2000
-saved_model: '' # 'saved_models/test_attn/iter_20000.pth'
+batch_size: 256 #32
+num_iter: 2001
+valInterval: 100
+saved_model: '' # '~/custom_example.pth'
 FT: False
 optim: False # default is Adadelta
 lr: 1
@@ -21,7 +21,7 @@ grad_clip: 5
 select_data: 'train' # this is dataset folder in train_data
 batch_ratio: '1' 
 total_data_usage_ratio: 1.0
-batch_max_length: 175
+batch_max_length: 34
 imgH: 64
 imgW: 600
 rgb: False
@@ -31,10 +31,10 @@ PAD: True
 contrast_adjust: 0.0
 data_filtering_off: False
 # Model Architecture
-Transformation: 'TPS'
-FeatureExtraction: 'ResNet'
+Transformation: 'None'
+FeatureExtraction: 'VGG'
 SequenceModeling: 'BiLSTM'
-Prediction: 'Attn'
+Prediction: 'CTC'
 num_fiducial: 20
 input_channel: 1
 output_channel: 256

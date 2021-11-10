@@ -100,7 +100,7 @@ class AttnLabelConverter(object):
 
     def decode(self, text_index, length):
         """convert text-index into text-label."""
-        if (len(text_index.shape) == 1):
+        if len(text_index.shape) == 1:
             text_index = np.expand_dims(text_index, 0)
         texts = []
         for index, l in enumerate(length):

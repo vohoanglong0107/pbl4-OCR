@@ -95,7 +95,7 @@ def train(opt, show_number=2):
     )
 
     if opt.saved_model != "":
-        pretrained_dict = torch.load(opt.saved_model)
+        pretrained_dict = torch.load(os.path.expanduser(opt.saved_model))
         if opt.new_prediction:
             model.Prediction = nn.Linear(
                 model.SequenceModeling_output,
@@ -167,7 +167,7 @@ def train(opt, show_number=2):
     for p in filter(lambda p: p.requires_grad, model.parameters()):
         filtered_parameters.append(p)
         params_num.append(np.prod(p.size()))
-    print('Trainable params num : ', sum(params_num))
+    print("Trainable params num : ", sum(params_num))
 
     # setup optimizer
     if opt.optim == "adam":
@@ -236,7 +236,7 @@ def train(opt, show_number=2):
         torch.nn.utils.clip_grad_norm_(model.parameters(), opt.grad_clip)
         optimizer.step()
         loss_avg.add(cost)
-        pbar.set_postfix({'loss': loss_avg.val().item()})
+        pbar.set_postfix({"loss": loss_avg.val().item()})
 
         # validation part
         if (i % opt.valInterval == 0) and (i != 0):

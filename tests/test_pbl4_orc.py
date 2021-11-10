@@ -22,6 +22,8 @@ def test_load_custom_example():
         "Screenshot 2021-11-04 154451.png",
         "Screenshot 2021-11-05 205551.png",
         "Screenshot 2021-11-05 213832.png",
+        "Screenshot 2021-11-08 211343.png",
+        "123.jpg",
     ],
 )
 def test_predict_custom_example(image):
@@ -38,10 +40,30 @@ def test_predict_custom_example(image):
         "Screenshot 2021-11-04 154451.png",
         "Screenshot 2021-11-05 205551.png",
         "Screenshot 2021-11-05 213832.png",
-        "1.jpg",
+        "Screenshot 2021-11-08 211343.png",
+        "123.jpg",
     ],
 )
 def test_predict_TRBA(image):
     reader = Reader(["en"], recog_network="TRBA")
+
+    print(reader.readtext(os.path.join("image", image)))
+
+
+@pytest.mark.parametrize(
+    "image",
+    [
+        "102022304261145309001.jpg",
+        "Screenshot 2021-11-04 153513.png",
+        "Screenshot 2021-11-04 154451.png",
+        "Screenshot 2021-11-05 205551.png",
+        "Screenshot 2021-11-05 213832.png",
+        "Screenshot 2021-11-08 211343.png",
+        "123.jpg",
+        "935.jpg",
+    ],
+)
+def test_predict_VBC(image):
+    reader = Reader(["en"], recog_network="VBC")
 
     print(reader.readtext(os.path.join("image", image)))

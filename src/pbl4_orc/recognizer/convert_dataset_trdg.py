@@ -7,7 +7,8 @@ import pandas as pd
 def rename_file_dataset(data_dir):
     dirs = os.listdir(data_dir)
     data = pd.DataFrame(
-        columns=["filename", "words"], index=pd.RangeIndex(start=0, stop=len(dirs), step=1)
+        columns=["filename", "words"],
+        index=pd.RangeIndex(start=0, stop=len(dirs), step=1),
     )
     for i, filename in enumerate(dirs):
         if filename.endswith(".jpg"):
