@@ -10,6 +10,12 @@ from skimage import io
 from urllib.request import urlretrieve
 
 
+class AttrDict(dict):
+    def __init__(self, *args, **kwargs):
+        super(AttrDict, self).__init__(*args, **kwargs)
+        self.__dict__ = self
+
+
 def loadImage(img_file):
     img = io.imread(img_file)  # RGB order
     if img.shape[0] == 2:

@@ -34,7 +34,7 @@ class CTCLabelConverter(object):
 
         return (torch.IntTensor(text), torch.IntTensor(length))
 
-    def decode_greedy(self, text_index, length):
+    def decode(self, text_index, length):
         """convert text-index into text-label."""
         texts = []
         index = 0
@@ -98,8 +98,10 @@ class AttnLabelConverter(object):
             )  # batch_text[:, 0] = [GO] token
         return (batch_text, torch.IntTensor(length))
 
-    def decode_greedy(self, text_index, length):
+    def decode(self, text_index, length):
         """convert text-index into text-label."""
+        if len(text_index.shape) == 1:
+            text_index = np.expand_dims(text_index, 0)
         texts = []
         for index, l in enumerate(length):
             text = "".join([self.character[i] for i in text_index[index, :]])

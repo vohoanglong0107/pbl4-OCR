@@ -48,20 +48,17 @@ def validation(model, criterion, evaluation_loader, converter, opt, device):
                 length_for_loss,
             )
 
-            if opt.decode == "greedy":
-                # Select max probabilty (greedy decoding) then decode index to character
-                _, preds_index = preds.max(2)
-                preds_index = preds_index.view(-1)
-                preds_str = converter.decode_greedy(preds_index.data, preds_size.data)
-            elif opt.decode == "beamsearch":
-                preds_str = converter.decode_beamsearch(preds, beamWidth=2)
+            # Select max probabilty (greedy decoding) then decode index to character
+            _, preds_index = preds.max(2)
+            preds_index = preds_index.view(-1).cpu()
+            preds_str = converter.decode(preds_index.numpy(), preds_size.numpy())
 
         else:
             preds = model(image, text_for_pred, is_train=False)
             forward_time = time.time() - start_time
 
             preds = preds[:, : text_for_loss.shape[1] - 1, :]
-            target = text_for_loss[:, 1:]  # without [GO] Symbol
+            target = text_for_loss[:, 1:].to(device)  # without [GO] Symbol
             cost = criterion(
                 preds.contiguous().view(-1, preds.shape[-1]),
                 target.contiguous().view(-1),

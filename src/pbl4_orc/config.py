@@ -18,6 +18,12 @@ detection_models = {
     }
 }
 
+recognition_models = {
+    "TRBA": {
+        "filename": "TRBA.pth",
+    }
+}
+
 # recognizer parameters
 imgH = 64
 separator_list = {"th": ["\xa2", "\xa3"], "en": ["\xa4", "\xa5"]}

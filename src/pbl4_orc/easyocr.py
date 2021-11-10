@@ -9,8 +9,9 @@ import yaml
 
 from .config import MODULE_PATH, BASE_PATH, detection_models, imgH
 from .detector import get_detector, get_textbox
-from .recognitor import get_recognizer, get_text
+from .recognizer import get_recognizer, get_text
 from .utils import (
+    AttrDict,
     group_text_box,
     get_image_list,
     get_paragraph,
@@ -87,9 +88,12 @@ class Reader(object):
             encoding="utf8",
         ) as file:
             recog_config = yaml.load(file, Loader=yaml.FullLoader)
+        recog_config = AttrDict(recog_config)
         global imgH
         imgH = recog_config["imgH"]
-        self.character = recog_config["character_list"]
+        self.character = (
+            recog_config.number + recog_config.symbol + recog_config.lang_char
+        )
         model_file = recog_network + ".pth"
         model_path = os.path.join(self.model_storage_directory, model_file)
         sys.path.append(self.model_storage_directory)
@@ -100,10 +104,9 @@ class Reader(object):
         if detector:
             self.detector = get_detector(detector_path, self.device)
         if recognizer:
-            network_params = recog_config["network_params"]
             self.recognizer, self.converter = get_recognizer(
                 recog_network,
-                network_params,
+                recog_config,
                 self.character,
                 separator_list,
                 self.dict_list,
