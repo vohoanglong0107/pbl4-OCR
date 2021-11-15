@@ -1,11 +1,7 @@
 # cache
 .mypy_cache
 .pytest_cache
-__pycache__
-src/pbl4_orc/__pycache__/
-src/pbl4_orc/detector/__pycache__/
-src/pbl4_orc/recognizer/__pycache__/
-tests/__pycache__/
+**/__pycache__/**
 # data
 data/
 

@@ -10,7 +10,7 @@ def main(sys_args: Optional[List[str]] = None) -> None:
     if sys_args is None:
         sys_args = sys.argv[1:]
     parser = argparse.ArgumentParser(
-        description="Train a model to recognize ORC-related text."
+        description="Train a model to recognize OCR-related text."
     )
     parser.add_argument(
         "command",

@@ -1,9 +1,10 @@
 import os
 
+import numpy as np
 import pytest
 
-from pbl4_orc import __version__
-from pbl4_orc import Reader
+from pbl4_ocr import __version__
+from pbl4_ocr import Reader
 
 
 def test_version():
@@ -67,3 +68,10 @@ def test_predict_VBC(image):
     reader = Reader(["en"], recog_network="VBC")
 
     print(reader.readtext(os.path.join("image", image)))
+
+def test_predict_VBC_batch():
+    reader = Reader(["en"], recog_network="VBC")
+    image_names = ["123.jpg", "935.jpg"]
+    image_full_path = [os.path.join("image", image) for image in image_names]
+
+    print(reader.readtext_batched(image_full_path))
