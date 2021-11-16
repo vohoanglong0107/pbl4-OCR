@@ -518,3 +518,11 @@ def set_result_with_confidence(results):
         final_result.append(results[best_row][col_ix])
 
     return final_result
+
+
+def get_raw_text(result):
+    """
+    Given a result from a model, return the raw text.
+    """
+    result = " ".join([x[1] for x in result])
+    return result
